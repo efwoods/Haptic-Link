@@ -9,7 +9,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 # Create a file handler to log to a file
-file_handler = logging.FileHandler("mouse_clicks.log")
+file_handler = logging.FileHandler("logs/mouse_clicks.log")
 file_handler.setLevel(logging.INFO)
 
 # Create a console handler to log to the console
