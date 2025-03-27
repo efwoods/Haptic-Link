@@ -2,11 +2,17 @@ import asyncio
 from pynput.mouse import Listener
 import websockets
 import json
+from dotenv import load_dotenv
+import os
+
+load_dotenv(dotenv_path="../../.env")
+
+IP_ADDR = os.getenv("IP_ADDR")
 
 
 # Send mouse click data (including coordinates) to the server
 async def send_click(x, y):
-    uri = "ws://localhost:8765"  # Server URL
+    uri = "ws://" + IP_ADDR + ":8765"  # Server URL
     try:
         async with websockets.connect(uri) as websocket:
             # Create a dictionary to hold the mouse click and coordinates

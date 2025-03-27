@@ -1,5 +1,11 @@
 import asyncio
 import websockets
+import os
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path="../../.env")
+
+IP_ADDR = os.getenv("IP_ADDR")
 
 
 # WebSocket server to listen for click events and print coordinates
@@ -29,9 +35,9 @@ async def handle_click(websocket):
 
 # Start the WebSocket server
 async def main():
-    server = await websockets.serve(handle_click, "localhost", 8765)
+    server = await websockets.serve(handle_click, IP_ADDR, 8765)
     print(
-        "Server is listening on ws://localhost:8765"
+        "Server is listening on ws://" + IP_ADDR + ":8765"
     )  # Log when the server starts listening
     try:
         await server.wait_closed()  # Wait for the server to shut down (it will keep running indefinitely)
