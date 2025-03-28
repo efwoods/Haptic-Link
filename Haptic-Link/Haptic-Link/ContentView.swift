@@ -1,48 +1,35 @@
-//
-//  ContentView.swift
-//  Haptic-Link
-//
-//  Created by Evan Woods on 3/27/25.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var webSocketManager = WebSocketManager()
-
+    
+    @StateObject private var bluetoothManager = BluetoothManager()
+    
     var body: some View {
-        VStack {
-            Text("Mouse Click Listener")
-                .font(.title)
-                .padding()
-
-            Text(webSocketManager.latestClick)
-                .font(.headline)
-                .foregroundColor(.blue)
-                .padding()
-
-            HStack {
-                Button("Connect") {
-                    webSocketManager.connect()
+        NavigationView {
+            List {
+                ForEach(bluetoothManager.peripherals, id: \.identifier) { peripheral in
+                    HStack {
+                        Text(peripheral.name ?? "Unknown")
+                        Spacer()
+                        Button("Connect") {
+                            bluetoothManager.connectToPeripheral(peripheral)
+                        }
+                    }
                 }
-                .padding()
-                .background(Color.green)
-                .foregroundColor(.white)
-                .clipShape(Capsule())
-
-                Button("Disconnect") {
-                    webSocketManager.disconnect()
-                }
-                .padding()
-                .background(Color.red)
-                .foregroundColor(.white)
-                .clipShape(Capsule())
+            }
+            .navigationBarTitle("Bluetooth Devices")
+            .onAppear {
+                bluetoothManager.startScanning()
+            }
+            .onDisappear {
+                bluetoothManager.stopScanning()
             }
         }
     }
 }
 
-
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
