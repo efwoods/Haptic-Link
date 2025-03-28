@@ -1,24 +1,11 @@
 import Foundation
 
-import Dotenv
-
 class WebSocketManager: ObservableObject {
     private var webSocketTask: URLSessionWebSocketTask?
     @Published var latestClick: String = "No Clicks Yet"
 
-    // Load environment variables
-    private let ipAddress: String
-
-    init() {
-        // Load the .env file
-        Dotenv.load()
-        
-        // Access environment variables
-        ipAddress = ProcessInfo.processInfo.environment["IP_ADDR"] ?? "localhost" // Default to localhost if not found
-    }
-    
     func connect() {
-        guard let url = URL(string: "ws://\(ipAddress):8765") else {
+        guard let url = URL(string: "ws://192.168.1.250:8765") else {
             print("Invalid WebSocket URL")
             return
         }
@@ -27,7 +14,6 @@ class WebSocketManager: ObservableObject {
         webSocketTask?.resume()
         receiveMessage()
     }
-
 
     func disconnect() {
         webSocketTask?.cancel(with: .goingAway, reason: nil)
